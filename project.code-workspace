@@ -1,0 +1,21 @@
+{
+  "extensions": {
+    "recommendations": ["hashicorp.hcl", "hashicorp.terraform"]
+  },
+  "folders": [
+    {
+      "path": "./"
+    }
+  ],
+  "settings": {
+    "[hcl]": {
+      "editor.formatOnSave": true
+    },
+    "[terraform]": {
+      "editor.defaultFormatter": "hashicorp.terraform",
+      "editor.formatOnSave": true
+    },
+    "files.eol": "\n",
+    "files.insertFinalNewline": true,
+  }
+}
