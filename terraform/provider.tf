@@ -1,11 +1,14 @@
 provider "google" {
   access_token = data.vault_generic_secret.gcp.data["token"]
   project      = "atyeti-backstage"
+  project_id = local.project
 }
 
 provider "google-beta" {
   access_token = data.vault_generic_secret.gcp.data["token"]
   project      = "atyeti-backstage"
+  project_id = local.project
+
 }
 
 provider "vault" {
