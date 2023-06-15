@@ -19,7 +19,6 @@ module "gke" {
   regional              = true
   grant_registry_access = true
   depends_on = [
-    google_project_service.services["artifactregistry"],
     google_project_service.services["compute"],
     google_project_service.services["container"],
   ]
