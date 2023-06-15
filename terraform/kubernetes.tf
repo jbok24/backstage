@@ -18,5 +18,7 @@ module "gke" {
   ip_range_services          = "${local.region}-services"
   regional                   = true
   grant_registry_access      = true
+  depends_on = [google_project_service.services["artifactregistry"]]
+  service = "${each.key}.googleapis.com"
 
 }
