@@ -16,7 +16,7 @@ module "gke" {
   subnetwork                 = local.region
   ip_range_pods              = "${local.region}-pods"
   ip_range_services          = "${local.region}-services"
-  regional = true
-  grant_registry_access = true
+  regional                   = true
+  grant_registry_access      = true
 
 }
