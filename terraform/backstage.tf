@@ -11,12 +11,32 @@ resource "kubernetes_secret" "postgres-secrets" {
   }
 
   data = {
-  POSTGRES_USER: "YmFja3N0YWdl"
-  POSTGRES_PASSWORD: "aHVudGVyMg=="
+  POSTGRES_USER = "YmFja3N0YWdl"
+  POSTGRES_PASSWORD = "aHVudGVyMg=="
   }
 
   type = "Opaque"
 }
+
+resource "kubernetes_api_service" "postgres-service" {
+  metadata {
+    name = "postgres-service"
+    namespace = "backstage"
+  }
+  spec {
+    selector {
+      app = "${kubernetes_pod.example.metadata.0.labels.app}"
+    }
+    session_affinity = "ClientIP"
+    port {
+      port        = 8080
+      target_port = 80
+    }
+
+    type = "LoadBalancer"
+  }
+}
+
 
 
 # kubernetes/postgres-service.yaml
