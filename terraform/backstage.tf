@@ -18,9 +18,6 @@ resource "kubernetes_secret" "postgres-secrets" {
   type = "Opaque"
 }
 
-resource "" "name" {
-  
-}
 
 # kubernetes/postgres-service.yaml
 #apiVersion: v1
