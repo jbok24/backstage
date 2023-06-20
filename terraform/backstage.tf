@@ -58,7 +58,6 @@ spec:
 resource "kubernetes_persistent_volume" "postgres-persistent" {
   metadata {
     name      = "postgres-storage"
-    namespace = "backstage"
   }
   spec {
     storage_class_name = "manual"
@@ -152,6 +151,9 @@ resource "kubernetes_deployment" "postgres-deployment" {
           image = "postgres:13.2-alpine"
           image_pull_policy = "IfNotPresent"
           name  = "postgres"
+          port {
+            container_port = 5432
+          }
           env_from {
             secret_ref {
               name = "postgres-secrets"
@@ -176,30 +178,14 @@ resource "kubernetes_deployment" "postgres-deployment" {
 # POSTGRE Service
 
 
-/*kubernetes/postgres-service.yaml
-#apiVersion: v1
-#kind: Service
-#metadata:
-  #name: postgres
-  #namespace: backstage
-#spec:
-  #selector:
-    #app: postgres
-  #ports:
-   #- port: 5432 */
-
 resource "kubernetes_api_service" "postgres-service" {
-  version = 1
-  kind    = Service
   metadata {
     name = "postgres-service"
   }
   spec {
-    selector {
-      app = "postgres"
-    }
-    port {
-      port = 5432
-    }
+     group_priority_minimum = 1
+     version = "v1"
+     version_priority = 1
+     group = ""
   }
 }
