@@ -125,6 +125,53 @@ spec:
         - name: postgresdb
           persistentVolumeClaim:
             claimName: postgres-storage-claim */
+    
+resource "kubernetes_deployment" "postgres-deployment" {
+  metadata {
+    name = "postgres"
+    namespace = "backstage"
+  }
+
+  spec {
+    replicas = 1
+    selector {
+      match_labels = {
+        app = "postgres"
+      }
+    }
+
+    template {
+      metadata {
+        labels = {
+          app = "postgres"
+        }
+      }
+
+      spec {
+        container {
+          image = "postgres:13.2-alpine"
+          image_pull_policy = "IfNotPresent"
+          name  = "postgres"
+          env_from {
+            secret_ref {
+              name = "postgres-secrets"
+            }
+          }
+          volume_mount {
+            mount_path = "/var/lib/postgresql/data"
+            name = "postgresdb"
+          }
+        }
+        volume {
+          name = "postgresdb"
+          persistent_volume_claim {
+            claim_name = "postgres-storage-claim"
+          }
+        }
+      }
+    }
+  }
+}
 
 # POSTGRE Service
 
@@ -147,10 +194,12 @@ resource "kubernetes_api_service" "postgres-service" {
   metadata {
     name = "postgres-service"
   }
-  selector {
-    app = "postgres"
-  }
-  port {
-    port = 5432
+  spec {
+    selector {
+      app = "postgres"
+    }
+    port {
+      port = 5432
+    }
   }
 }
