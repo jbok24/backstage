@@ -21,13 +21,15 @@ resource "kubernetes_secret" "postgres-secrets" {
 resource "kubernetes_api_service" "postgres-service" {
   metadata {
     name = "postgres-service"
-    namespace = "backstage"
   }
   spec {
+    group = "postgres"
+    group_priority_minimum = "*.k8s.io"
+    version = v1
+    version_priority = v1
     selector {
       app = "${kubernetes_pod.example.metadata.0.labels.app}"
     }
-    session_affinity = "ClientIP"
     port {
       port        = 8080
       target_port = 80
